@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBolt, faTruck, faTags, faStar } from "@fortawesome/free-solid-svg-icons";
+import { Book } from "../../types/book";
+import { getBook } from "../../services/bookService";
 
 const HomePage = () => {
+  const [books, setBooks] = useState<Book[]>([]);
+  
+  const getBooks = async () => {
+    const data = await getBook()
+    setBooks(data);
+  }
+  useEffect(() => {
+    getBooks();
+  }, [])
+
   const categories = [
     { title: "English Books", img: "https://salt.tikicdn.com/cache/280x280/ts/product/90/56/5d/90c183d6cb1c69616754db8993c09aa0.jpg" },
     { title: "Sách tiếng Việt", img: "https://salt.tikicdn.com/cache/280x280/ts/product/e1/51/f2/f45c1df46e3c6cbf813ed97ec1f0d1ff.jpg" },
@@ -99,22 +111,35 @@ const HomePage = () => {
                 </section>
 
                 {/* Danh sách sản phẩm */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {products.map((product, index) => (
-                    <div key={index} className="border rounded-lg p-4 hover:shadow-md">
-                    <img src={product.img} alt={product.title} className="h-48 object-contain mb-2 mx-auto" />
-                    <h3 className="font-medium line-clamp-2 mb-1">{product.title}</h3>
-                    <p className="text-sm text-gray-500 mb-1">{product.author}</p>
-                    <p className="text-red-600 font-bold">
-                        {product.price.toLocaleString()}₫
-                        <span className="ml-2 text-sm text-gray-500 line-through">
-                        {(product.price / (1 - product.discount / 100)).toFixed(0)}₫
-                        </span>
-                    </p>
-                    <div className="text-xs text-gray-400 mt-1">Giảm {product.discount}%</div>
+                <div className="flex flex-wrap -mx-2">
+                  {books.map((book) => (
+                    <div key={book.id} className="w-1/2 md:w-1/4 px-2 mb-4">
+                      <div className="border rounded-lg p-4 hover:shadow-md h-full">
+                        <img
+                          src={book.images?.[0]?.thumbnail_url || "/no-image.png"}
+                          alt={book.name}
+                          className="h-48 object-contain mb-2 mx-auto"
+                        />
+                        <h3 className="font-medium line-clamp-2 mb-1">{book.name}</h3>
+                        <p className="text-sm text-gray-500 mb-1">
+                          {book.authors?.map((a) => a.name).join(", ")}
+                        </p>
+                        <p className="text-red-600 font-bold">
+                          {book.current_seller?.price?.toLocaleString()}₫
+                          {book.original_price > book.current_seller?.price && (
+                            <span className="ml-2 text-sm text-gray-500 line-through">
+                              {book.original_price?.toLocaleString()}₫
+                            </span>
+                          )}
+                        </p>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {book.quantity_sold?.text || ""}
+                        </div>
+                      </div>
                     </div>
-                ))}
+                  ))}
                 </div>
+
             </main>
         </div>
     </div>
