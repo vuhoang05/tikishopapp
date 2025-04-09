@@ -69,10 +69,30 @@ const Header = () => {
             <FontAwesomeIcon icon={faHouse} />
             <span>Trang chủ</span>
             </a>
-            <a href="#" className="flex items-center space-x-1 hover:text-blue-600">
-            <FontAwesomeIcon icon={faUser} />
-            <span>Tài khoản</span>
-            </a>
+           {/* Dropdown Tài khoản */}
+            <div className="relative group">
+              <div className="flex items-center space-x-1 hover:text-blue-600 cursor-pointer">
+                <FontAwesomeIcon icon={faUser} />
+                <span>Tài khoản</span>
+              </div>
+
+              {/* Nội dung dropdown */}
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-opacity z-50">
+                <Link
+                  to="/login"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  Đăng nhập
+                </Link>
+                <Link
+                  to="/register"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  Đăng ký
+                </Link>
+              </div>
+            </div>
+
             <div className="border-l h-6" />
             <a href="#" className="relative hover:text-blue-600">
             <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
