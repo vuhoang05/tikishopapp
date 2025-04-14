@@ -7,7 +7,7 @@ const CustomerLayout = () => {
     return (
         <div className="h-screen flex flex-col">
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow bg-gray-100">
                 <Outlet />
             </main>
             <Footer />
