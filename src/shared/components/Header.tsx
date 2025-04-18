@@ -94,12 +94,12 @@ const Header = () => {
             </div>
 
             <div className="border-l h-6" />
-            <a href="#" className="relative hover:text-blue-600">
+            <Link to="/cart" className="relative hover:text-blue-600">
             <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
                 0
             </span>
-            </a>
+            </Link>
         </div>
         </div>
 

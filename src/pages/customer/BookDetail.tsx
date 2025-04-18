@@ -1,14 +1,16 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Book } from "../../types/book";
 import { getBookById } from "../../services/bookService";
+import { useCart } from "../../useContext/CardContext";
 
 const BookDetail = () => {
   const { id } = useParams();
   const [book, setBook] = useState<Book | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descriptionMaxLength = 300;
-
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
   useEffect(() => {
     if (!id) return;
     getBookById(Number(id)).then(setBook);
@@ -27,6 +29,19 @@ const BookDetail = () => {
     ? book.description
     : book.description?.slice(0, descriptionMaxLength) + (book.description && book.description.length > descriptionMaxLength ? "..." : "")
 
+  
+
+    const handleBuyNow = () => {
+      const quantity = Number((document.querySelector("input[type=number]") as HTMLInputElement).value);
+      addToCart(book, quantity); // Thêm vào giỏ
+      navigate("/checkout");     // Chuyển sang trang thanh toán
+    };
+    
+
+    const handleAddToCart = () => {
+      const quantity = Number((document.querySelector("input[type=number]") as HTMLInputElement).value);
+      addToCart(book, quantity);
+    };
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 bg-gray-100">
       {/* Wrapper flex 3 cột */}
@@ -129,10 +144,10 @@ const BookDetail = () => {
             />
           </div>
 
-          <button className="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600">
+          <button onClick={handleBuyNow} className="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600">
             Mua ngay
           </button>
-          <button className="w-full border py-2 rounded hover:bg-gray-100">
+          <button onClick={handleAddToCart} className="w-full border py-2 rounded hover:bg-gray-100">
             Thêm vào giỏ
           </button>
           <button className="w-full border py-2 rounded hover:bg-gray-100">
