@@ -51,7 +51,7 @@ const Footer = () => {
           <h3 className="font-semibold mt-4 mb-2">Chứng nhận bởi</h3>
           <div className="flex space-x-2">
             <img src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/bo-cong-thuong.svg" alt="bct" className="h-8" />
-            <img src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/dmca.svg" alt="dmca" className="h-8" />
+            
           </div>
         </div>
 
@@ -60,19 +60,17 @@ const Footer = () => {
           <h3 className="font-semibold mb-2">Phương thức thanh toán</h3>
           <div className="grid grid-cols-4 gap-2">
             {[
-              "tiki",
-              "visa",
-              "mastercard",
-              "jcb",
-              "atm",
-              "momo",
-              "zalo",
-              "vnpay",
-              "tragop",
+              "./public/img/zalo.png",
+              "./public/img/vnpay.jpg",
+              "./public/img/visa.jpg",
+              "./public/img/momo.jpg",
+              "./public/img/viettel-money-logo.jpg",
+              "./public/img/1.jpg",
+             
             ].map((logo, i) => (
               <img
                 key={i}
-                src={`https://frontend.tikicdn.com/_desktop-next/static/img/payment/${logo}.svg`}
+                src={logo}
                 alt={logo}
                 className="h-6"
               />
@@ -81,7 +79,7 @@ const Footer = () => {
 
           <h3 className="font-semibold mt-4 mb-2">Dịch vụ giao hàng</h3>
           <img
-            src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/tikinow.png"
+            src="./public/img/tiki.jpg"
             alt="TikiNOW"
             className="h-8"
           />
@@ -91,9 +89,8 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-2">Kết nối với chúng tôi</h3>
           <div className="flex space-x-3 mb-4">
-            <img src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/social/facebook.svg" alt="fb" className="h-6" />
-            <img src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/social/youtube.svg" alt="yt" className="h-6" />
-            <img src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/social/zalo.svg" alt="zalo" className="h-6" />
+            <img src="./public/img/fb.webp" alt="fb" className="h-6" />
+            <img src="./public/img/zalo.png" alt="zalo" className="h-6" />
           </div>
           <h3 className="font-semibold mb-2">Tải ứng dụng trên điện thoại</h3>
           <div className="flex space-x-2">
