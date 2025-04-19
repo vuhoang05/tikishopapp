@@ -73,10 +73,13 @@ return (
                 }
                 className="w-40 flex-shrink-0 text-center cursor-pointer"
               >
-                <div className="rounded mb-2 h-28 bg-gray-100 flex items-center justify-center text-sm">
-                  🧩
-                </div>
+                <img
+                  src={item.img}
+                  alt=""
+                  className="w-24 h-24 object-cover rounded-full"
+                />
                 <p className="truncate">{item.name}</p>
+
               </div>
             ))}
           </div>

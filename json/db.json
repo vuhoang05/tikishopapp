@@ -341,26 +341,31 @@
       {
         "createdAt": "2024-04-09T10:00:00.000Z",
         "name": "Sách tiếng Việt",
+        "img": "https://salt.tikicdn.com/cache/w1200/ts/product/03/d3/c8/bbf6c2f554e6bc3ac5e311f603dc5fc2.png",
         "id": "316"
       },
       {
         "createdAt": "2024-04-09T10:00:00.000Z",
         "name": "Sách kỹ năng làm việc",
+        "img": "https://webvinabook.com/wp-content/uploads/2023/05/z4360616015642_cf62c6eebcafe46a1239d92a27f7d5ce.jpg",
         "id": "385"
       },
       {
         "createdAt": "2024-04-09T10:00:00.000Z",
         "name": "Truyện ngắn - Tản văn - Tạp Văn",
+        "img": "https://th.bing.com/th/id/R.f566688475d584140ae05a5a73d76a83?rik=Fw8RUfykwoKYIg&pid=ImgRaw&r=0",
         "id": "845"
       },
       {
         "createdAt": "2024-04-09T10:00:00.000Z",
         "name": "Tác phẩm kinh điển",
+        "img": "https://th.bing.com/th/id/R.9efb13d482050e321bb79dfce2732954?rik=987iyCE1eea58w&pid=ImgRaw&r=0",
         "id": "842"
       },
       {
         "createdAt": "2024-04-09T10:00:00.000Z",
         "name": "Sách tư duy - Kỹ năng sống",
+        "img": "https://cdn0.fahasa.com/media/catalog/product/9/7/9786044742250.jpg",
         "id": "871"
       }
     ],
