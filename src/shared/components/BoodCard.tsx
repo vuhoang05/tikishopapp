@@ -4,12 +4,22 @@ import { Book } from "../../types/book";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const BookCard = ({ book }: { book: Book }) => {
-  const discount = Math.round(
-    ((book.original_price - book.current_seller.price) / book.original_price) * 100
-  );
+  const hasPrice =
+    book.current_seller && typeof book.current_seller.price === "number";
+  const hasOriginalPrice =
+    typeof book.original_price === "number" && book.original_price > 0;
+
+  const discount =
+    hasPrice && hasOriginalPrice
+      ? Math.round(
+          ((book.original_price - book.current_seller.price) /
+            book.original_price) *
+            100
+        )
+      : 0;
 
   return (
-    <Link to={`/books/${book.id}`}>
+    <Link to={`/books/${book._id}`}>
       <div className="bg-white rounded-lg p-3 h-full relative hover:shadow-lg transition-all">
         {/* Hình ảnh */}
         <div className="relative">
@@ -25,13 +35,21 @@ const BookCard = ({ book }: { book: Book }) => {
 
         {/* Giá */}
         <div className="text-red-600 font-bold text-base">
-          {book.current_seller?.price.toLocaleString()}₫
-          <span className="text-sm text-gray-500 ml-2 line-through">
-            {book.original_price.toLocaleString()}₫
-          </span>
-          <span className="ml-2 text-xs text-white bg-gray-500 px-1 rounded">
-            -{discount}%
-          </span>
+          {hasPrice
+            ? `${book.current_seller.price.toLocaleString()}₫`
+            : "Đang cập nhật"}
+
+          {hasOriginalPrice && (
+            <span className="text-sm text-gray-500 ml-2 line-through">
+              {book.original_price.toLocaleString()}₫
+            </span>
+          )}
+
+          {discount > 0 && (
+            <span className="ml-2 text-xs text-white bg-gray-500 px-1 rounded">
+              -{discount}%
+            </span>
+          )}
         </div>
 
         {/* Tác giả + tên sách */}
@@ -44,7 +62,7 @@ const BookCard = ({ book }: { book: Book }) => {
         <div className="flex items-center text-xs text-gray-500 mt-1 gap-1 mb-[20px]">
           <span>{book.rating_average || 4.5}</span>
           <FontAwesomeIcon icon={faStar} className="text-amber-300" />
-          <span>{book.quantity_sold?.text}</span>
+          <span>{book.quantity_sold?.text || "Chưa có dữ liệu"}</span>
         </div>
 
         {/* Giao siêu tốc */}

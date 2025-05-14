@@ -273,7 +273,8 @@ const BookForm = () => {
             className="w-full border px-2 py-1 rounded mb-2"
           />
           <div className="flex items-center">
-            <input
+            <input 
+            title="d"
               type="checkbox"
               checked={book.categories.is_leaf}
               onChange={(e) => handleNestedChange(`categories.is_leaf`, e.target.checked)}
