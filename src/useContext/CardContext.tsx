@@ -28,10 +28,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (book: Book, quantity: number) => {
     setCartItems(prev => {
-      const existing = prev.find(item => item.book.id === book.id);
+      const existing = prev.find(item => item.book._id === book._id);
       if (existing) {
         return prev.map(item =>
-          item.book.id === book.id
+          item.book._id === book._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -41,13 +41,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromCart = (bookId: string) => {
-    setCartItems(prev => prev.filter(item => item.book.id !== bookId));
+    setCartItems(prev => prev.filter(item => item.book._id !== bookId));
   };
 
   const updateQuantity = (bookId: string, quantity: number) => {
     setCartItems(prev =>
       prev.map(item =>
-        item.book.id === bookId ? { ...item, quantity } : item
+        item.book._id === bookId ? { ...item, quantity } : item
       )
     );
   };

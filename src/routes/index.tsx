@@ -7,6 +7,7 @@ import Cart from "../pages/customer/Cart";
 import Checkout from "../pages/customer/Checkout";
 import AdminLayout from "../shared/layout/AdminLayout";
 import BookForm from "../pages/admin/BookForm";
+import Login from "../pages/customer/Login";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
     element: <CustomerLayout />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: "login", element: <Login /> },
       { path: "cart", element: <Cart /> },
       { path: "books/:id", element: <BookDetail /> },
       { path: "checkout", element: <Checkout /> },

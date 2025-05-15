@@ -1,14 +1,27 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../services/authService";
+import { useAuth } from "../../useContext/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { loginSuccess } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-    // TODO: gọi API login
+
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await login(email, password);
+    loginSuccess(res.user, res.token); // <-- cập nhật Context
+    navigate("/");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (err) {
+      alert("Sai email hoặc mật khẩu");
+    }
   };
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -50,7 +63,10 @@ const Login = () => {
 
           <div className="text-center text-sm mt-4">
             Chưa có tài khoản?{" "}
-            <span className="text-blue-500 font-medium cursor-pointer">
+            <span
+              onClick={() => navigate("/register")}
+              className="text-blue-500 font-medium cursor-pointer"
+            >
               Tạo tài khoản
             </span>
           </div>
