@@ -1,8 +1,10 @@
 
 import { useState } from "react";
 import { useCart } from "../../useContext/CardContext";
+import { useAuth } from "../../useContext/AuthContext";
 
 const Checkout = () => {
+  const { user } = useAuth();
   const { cartItems, clearCart } = useCart();
   const [shippingMethod, setShippingMethod] = useState("fast");
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -50,7 +52,7 @@ const Checkout = () => {
           {/* Danh sách sản phẩm */}
           <div className="mt-4 border-t pt-4">
             {cartItems.map((item) => (
-              <div key={item.book.id} className="flex justify-between items-center mb-2">
+              <div key={item.book._id} className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2">
                   <img
                     src={item.book.images?.[0]?.thumbnail_url || "/no-image.png"}
@@ -72,6 +74,7 @@ const Checkout = () => {
 
         {/* Hình thức thanh toán */}
         <div className="bg-white p-5 rounded shadow">
+          
           <h2 className="font-semibold text-lg mb-4">Chọn hình thức thanh toán</h2>
           <label className="flex items-center gap-3 mb-2">
             <input
@@ -94,6 +97,20 @@ const Checkout = () => {
 
       {/* Col right (1/3) */}
       <div className="bg-white p-5 rounded shadow space-y-4">
+        {/* Thông tin người nhận */}
+      <div className="text-sm leading-relaxed border-t pt-4">
+        <div className="font-semibold">
+          {user?.fullName || "Chưa có tên"}{" "}
+          <span className="text-gray-500 ml-2">{user?.phone || "Chưa có số điện thoại"}</span>
+        </div>
+        <div>
+          <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded text-xs mr-2">
+            Văn phòng
+          </span>
+          {user?.address || "Chưa có địa chỉ"}
+        </div>
+      </div>
+
         <h2 className="font-semibold text-lg">Đơn hàng</h2>
         <div className="text-sm space-y-1">
           <div className="flex justify-between">

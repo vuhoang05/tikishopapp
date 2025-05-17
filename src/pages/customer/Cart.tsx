@@ -45,7 +45,7 @@ const Cart = () => {
                         min={1}
                         value={quantity}
                         onChange={(e) =>
-                          handleQuantityChange(book.id, Number(e.target.value))
+                          handleQuantityChange(book._id, Number(e.target.value))
                         }
                         className="w-16 px-2 py-1 border rounded"
                       />
@@ -57,7 +57,7 @@ const Cart = () => {
                     {(book.current_seller.price * quantity).toLocaleString()}₫
                   </p>
                   <button
-                    onClick={() => removeFromCart(book.id)}
+                    onClick={() => removeFromCart(book._id)}
                     className="text-sm text-blue-500 hover:underline mt-2"
                   >
                     Xoá

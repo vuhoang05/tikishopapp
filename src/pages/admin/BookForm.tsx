@@ -3,7 +3,7 @@ import { Book } from "../../types/book";
 import { createBook } from "../../services/bookService";// Import hàm createBook
 
 const initialBook: Book = {
-  id: "",
+  _id: "",
   name: "",
   short_description: "",
   description: "",

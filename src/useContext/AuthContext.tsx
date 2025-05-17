@@ -1,10 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { getCurrentUser, getToken, isAuthenticated, logout as logoutService } from "../services/authService";
-
-interface User {
-  email: string;
-  role: string;
-}
+import { getCurrentUser, getToken, logout as logoutService } from "../services/authService";
+import { User } from "../types/user";
 
 interface AuthContextType {
   user: User | null;
@@ -22,7 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const storedToken = getToken();
-    const storedUser = getCurrentUser();
+    const storedUser = getCurrentUser();  // Now returns full User object or null
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(storedUser);

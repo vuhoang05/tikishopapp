@@ -1,11 +1,9 @@
+import { User } from "../types/user";
 import instance from "./apiService";
 // Interface phản hồi sau khi đăng nhập
 export interface AuthResponse {
   token: string;
-  user: {
-    email: string;
-    role: string;
-  };
+  user: User;
 }
 // Đăng ký
 export const register = async (
@@ -24,7 +22,7 @@ export const login = async (
   const res: AuthResponse = await instance.post("/auth/login", { email, password });
 
   localStorage.setItem("accessToken", res.token);
-  localStorage.setItem("user", JSON.stringify(res.user));
+  localStorage.setItem("user", JSON.stringify(res.user)); // res.user phải chứa fullName, phone, address...
   return res;
 };
 // Đăng xuất
@@ -39,11 +37,10 @@ export const getToken = (): string | null => {
 };
 
 // Lấy thông tin người dùng hiện tại
-export const getCurrentUser = (): { email: string; role: string } | null => {
-  const user = localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
+export const getCurrentUser = (): User | null => {
+  const userStr = localStorage.getItem("user");
+  return userStr ? JSON.parse(userStr) as User : null;
 };
-
 // Kiểm tra đã đăng nhập chưa
 export const isAuthenticated = (): boolean => {
   return !!getToken();
