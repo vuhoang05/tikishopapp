@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
@@ -9,6 +9,8 @@ import {
   faRotate,
   faBoxOpen,
   faTag,
+  faBars, // Added for mobile menu
+  faTimes, // Added for mobile menu close
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/logo.jfif";
@@ -17,6 +19,8 @@ import { useAuth } from "../../useContext/AuthContext";
 const Header = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   const categories = [
     "điện gia dụng",
@@ -40,6 +44,16 @@ const Header = () => {
     { icon: faTag, text: "Giá siêu rẻ" },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024); // Consider it large screen if width is >= 1024px
+    };
+
+    handleResize(); // Check on initial load
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-300">
       {/* Freeship banner */}
@@ -55,6 +69,16 @@ const Header = () => {
           <img src={Logo} alt="Logo" className="w-20" />
         </Link>
 
+        {/* Mobile Menu Button */}
+        {!isLargeScreen && (
+          <button
+            className="lg:hidden" // Hide on large screens
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <FontAwesomeIcon icon={faBars} className="text-xl text-gray-700" />
+          </button>
+        )}
+
         {/* Search */}
         <div className="flex flex-1 max-w-3xl">
           <input
@@ -68,10 +92,10 @@ const Header = () => {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center space-x-6 text-gray-700 text-sm">
-          <Link to="/" className="flex items-center space-x-1 hover:text-blue-600">
+        <div className="flex items-center space-x-4 text-gray-700 text-sm"> {/* Reduced space-x */}
+          <Link to="/" className="hidden md:flex items-center space-x-1 hover:text-blue-600">
             <FontAwesomeIcon icon={faHouse} />
-            <span>Trang chủ</span>
+            <span className="">Trang chủ</span>
           </Link>
 
           {/* Tài khoản */}
@@ -80,9 +104,9 @@ const Header = () => {
             onMouseEnter={() => setShowDropdown(true)}
             onMouseLeave={() => setShowDropdown(false)}
           >
-            <div className="flex items-center space-x-1 hover:text-blue-600 cursor-pointer">
+            <div className="hidden md:flex items-center space-x-1 hover:text-blue-600 cursor-pointer">
               <FontAwesomeIcon icon={faUser} />
-              <span>{isLoggedIn ? user?.email : "Tài khoản"}</span>
+              <span className="hidden md:inline">{isLoggedIn ? user?.email : "Tài khoản"}</span>
             </div>
 
             {showDropdown && (
@@ -114,26 +138,105 @@ const Header = () => {
             )}
           </div>
 
-          <div className="border-l h-6" />
-          <Link to="/cart" className="relative hover:text-blue-600">
-            <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
-              0
-            </span>
-          </Link>
+          {/* Giỏ hàng */}
+          <div className="">
+            <Link to="/cart" className="relative hover:text-blue-600">
+              <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                0
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Danh mục */}
-      <div className="px-6 pb-2">
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-          {categories.map((item, index) => (
-            <a key={index} href="#" className="hover:text-blue-600 capitalize">
-              {item}
-            </a>
-          ))}
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex">
+          <div className="bg-white w-64 h-full transform transition-transform duration-300 ease-in-out">
+            {/* Mobile Menu Header */}
+            <div className="flex justify-end p-4">
+              <button onClick={() => setIsMobileMenuOpen(false)}>
+                <FontAwesomeIcon icon={faTimes} className="text-xl text-gray-700" />
+              </button>
+            </div>
+
+            {/* Mobile Menu Content */}
+            <div className="px-4 space-y-4">
+              <div className="border-b border-gray-300 pb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Danh mục</h2>
+                <div className="flex flex-col gap-2">
+                  {categories.map((item, index) => (
+                    <a
+                      key={index}
+                      href="#"
+                      className="hover:text-blue-600 capitalize text-gray-700"
+                      onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
+                    >
+                      {item}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-b border-gray-300 pb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Tài khoản</h2>
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false); // Close menu on logout
+                    }}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    Đăng xuất
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      to="/login"
+                      className="hover:text-blue-600 text-gray-700"
+                      onClick={() => setIsMobileMenuOpen(false)} // Close menu
+                    >
+                      Đăng nhập
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="hover:text-blue-600 text-gray-700"
+                      onClick={() => setIsMobileMenuOpen(false)} // Close menu
+                    >
+                      Đăng ký
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <div>
+                <Link
+                  to="/cart"
+                  className="flex items-center gap-2 hover:text-blue-600 text-gray-700"
+                  onClick={() => setIsMobileMenuOpen(false)} // Close menu
+                >
+                  <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
+                  <span>Giỏ hàng</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Danh mục (Desktop) */}
+      {isLargeScreen && (
+        <div className="px-6 pb-2">
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+            {categories.map((item, index) => (
+              <a key={index} href="#" className="hover:text-blue-600 capitalize">
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Cam kết */}
       <div className="px-6 py-2 border-t border-gray-300 flex flex-wrap items-center gap-6 text-sm text-gray-700">
