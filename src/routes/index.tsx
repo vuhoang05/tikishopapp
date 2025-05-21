@@ -10,6 +10,7 @@ import BookForm from "../pages/admin/BookForm";
 import Login from "../pages/customer/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
+import Confirm from "../pages/customer/Confirm";
 
 
 
@@ -36,6 +37,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+        {
+        path: "confirm",
+        element: (
+          <ProtectedRoute>
+            <Confirm />
+          </ProtectedRoute>
+        ),
+      },
       { path: "books/:id", element: <BookDetail /> },
     ],
   },
@@ -45,11 +54,11 @@ const router = createBrowserRouter([
       <AdminRoute>
         <AdminLayout />
       </AdminRoute>
-    ),
-    children: [
-      { index: true, element: <HomePage /> },
-      { path: "book", element: <BookForm /> },
-    ],
-  },
+  ),
+  children: [
+    { index: true, element: <BookForm /> },
+  ],
+}
+
 ]);
 export default router;

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useCart } from "../../useContext/CardContext";
 import { useAuth } from "../../useContext/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -10,19 +11,25 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
 
   const shippingFee = shippingMethod === "fast" ? 25000 : 16000;
-  const shippingDiscount = shippingMethod === "fast" ? 25000 : 0;
-
+  const shippingDiscount = shippingMethod === "fast" ? 0 : 0;
+const navigate = useNavigate();
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.book.current_seller.price * item.quantity,
     0
   );
 
-  const voucherDiscount = 59000; // giả lập mã giảm giá trực tiếp
-  const total = subtotal + shippingFee - voucherDiscount - shippingDiscount;
+  // const voucherDiscount = 59000; // giả lập mã giảm giá trực tiếp
+  const total = subtotal + shippingFee - shippingDiscount;
 
   const handleOrder = () => {
-    alert("Đặt hàng thành công!");
     clearCart();
+    navigate("/confirm", {
+      state: {
+        total,
+        orderId: Math.floor(Math.random() * 1000000000).toString(),
+        bookName: cartItems[0]?.book.name || "Sản phẩm",
+      },
+    });
   };
 
   return (
@@ -121,10 +128,10 @@ const Checkout = () => {
             <span>Phí vận chuyển</span>
             <span>{shippingFee.toLocaleString()}₫</span>
           </div>
-          <div className="flex justify-between text-green-600">
+          {/* <div className="flex justify-between text-green-600">
             <span>Giảm giá trực tiếp</span>
             <span>-{voucherDiscount.toLocaleString()}₫</span>
-          </div>
+          </div> */}
           {shippingDiscount > 0 && (
             <div className="flex justify-between text-green-600">
               <span>Giảm giá vận chuyển</span>

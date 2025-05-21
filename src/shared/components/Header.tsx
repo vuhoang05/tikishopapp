@@ -15,13 +15,16 @@ import {
 import { Link } from "react-router-dom";
 import Logo from "../../assets/logo.jfif";
 import { useAuth } from "../../useContext/AuthContext";
+import { useCart } from "../../useContext/CardContext";
 
 const Header = () => {
   const { user, isLoggedIn, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const { cartItems } = useCart();
 
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const categories = [
     "điện gia dụng",
     "xe cộ",
@@ -71,7 +74,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         {!isLargeScreen && (
-          <button
+          <button title="."
             className="lg:hidden" // Hide on large screens
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -110,25 +113,40 @@ const Header = () => {
             </div>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-50">
+              <div className="absolute right-0 w-40 bg-white border rounded shadow-md z-50">
                 {isLoggedIn ? (
+                  <>
+                  <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 rounded"
+                    >Profile</Link>
+                  {user?.role === 'admin' && (
+                  <Link
+                    to="/admin"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 rounded"
+                  >
+                    Admin page
+                  </Link>
+                )}
                   <button
                     onClick={logout}
-                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded"
                   >
                     Đăng xuất
                   </button>
+                  </>
+                  
                 ) : (
                   <>
                     <Link
                       to="/login"
-                      className="block px-4 py-2 text-sm hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 rounded"
                     >
                       Đăng nhập
                     </Link>
                     <Link
                       to="/register"
-                      className="block px-4 py-2 text-sm hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 rounded"
                     >
                       Đăng ký
                     </Link>
@@ -142,9 +160,11 @@ const Header = () => {
           <div className="">
             <Link to="/cart" className="relative hover:text-blue-600">
               <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
-                0
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs px-2 py-[1px] rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </Link>
           </div>
         </div>
@@ -152,11 +172,11 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex">
+        <div className="fixed top-0 left-0 w-full h-full bg-opacity-50 z-50 flex">
           <div className="bg-white w-64 h-full transform transition-transform duration-300 ease-in-out">
             {/* Mobile Menu Header */}
             <div className="flex justify-end p-4">
-              <button onClick={() => setIsMobileMenuOpen(false)}>
+              <button title="mob" onClick={() => setIsMobileMenuOpen(false)}>
                 <FontAwesomeIcon icon={faTimes} className="text-xl text-gray-700" />
               </button>
             </div>
@@ -182,15 +202,23 @@ const Header = () => {
               <div className="border-b border-gray-300 pb-4">
                 <h2 className="text-lg font-semibold text-gray-800">Tài khoản</h2>
                 {isLoggedIn ? (
-                  <button
-                    onClick={() => {
-                      logout();
-                      setIsMobileMenuOpen(false); // Close menu on logout
-                    }}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    Đăng xuất
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false); // Close menu on logout
+                      }}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      Đăng xuất
+                    </button>
+                    <br/>
+                    <Link
+                      to="/profile"
+                      className="hover:text-blue-600 text-gray-700"
+                    > Profile</Link>
+                  </>
+                  
                 ) : (
                   <div className="flex flex-col gap-2">
                     <Link
@@ -239,15 +267,16 @@ const Header = () => {
       )}
 
       {/* Cam kết */}
-      <div className="px-6 py-2 border-t border-gray-300 flex flex-wrap items-center gap-6 text-sm text-gray-700">
-        <span className="font-bold text-blue-600">Cam kết</span>
-        {commitmentItems.map((item, index) => (
-          <div key={index} className="flex items-center space-x-1">
-            <FontAwesomeIcon icon={item.icon} className="text-blue-600" />
-            <span>{item.text}</span>
-          </div>
-        ))}
-      </div>
+    <div className="px-4 py-2 border-t border-gray-300 flex items-center gap-x-3 gap-y-2 text-xs sm:text-sm text-gray-700">
+      <span className="font-bold text-blue-600 whitespace-nowrap">Cam kết</span>
+      {commitmentItems.map((item, index) => (
+        <div key={index} className="flex items-center gap-1">
+          <FontAwesomeIcon icon={item.icon} className="text-blue-600 text-[13px]" />
+          <span className="truncate">{item.text}</span>
+        </div>
+      ))}
+    </div>
+
     </header>
   );
 };
